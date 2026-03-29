@@ -170,8 +170,8 @@ def run_grid_experiment(p_side, connectivity, coupling_type, omega,
 
     results, done, total = [], 0, len(beta_values) * n_trials
     for beta in beta_values:
-        n       = max(30, int(np.ceil(beta * 10 * d * log_p)))
-        lam_n   = np.sqrt(log_p / n)          # c = 1
+        n       = int(np.ceil(beta * 10 * (d**3) * log_p))
+        lam_n   = c * np.sqrt(log_p / n)
         success = 0
         for trial in range(n_trials):
             seed = trial * 997 + p_side * 31
@@ -196,8 +196,8 @@ def run_star_experiment(p, degree_type, omega, beta_values, n_trials,
     succ_list, disagree_list = [], []
     done, total = 0, len(beta_values) * n_trials
     for beta in beta_values:
-        n         = max(30, int(np.ceil(beta * 10 * d * log_p)))
-        lam_n     = np.sqrt(log_p / n)        # c = 1
+        n         = int(np.ceil(beta * 10 * (d**3) * log_p))
+        lam_n     = c * np.sqrt(log_p / n)
         success   = 0
         disagrees = []
         for trial in range(n_trials):
@@ -506,6 +506,9 @@ with st.sidebar:
             help="mixed: θ=±ω · attractive: θ=+ω",
         )
 
+    c = st.slider("Regularization scaling c", 0.5, 10.0, 3.0, 0.5,
+                  help="Larger c → sparser graph.")
+    
     omega = st.slider("|ω| edge weight", 0.10, 1.0,
                       0.25 if "8-NN" in exp_type else 0.50, 0.05)
 
@@ -519,15 +522,13 @@ with st.sidebar:
 
     st.divider()
     st.markdown(
-        r"""
-**Regularisation** (c = 1, fixed)
 
-$$\lambda_n = \sqrt{\frac{\log p}{n}}, \quad C_{\text{sk}} = \frac{1}{\sqrt{n \log p}}$$
+    rf"""
+**Regularisation**
 
-**AND rule**: edge *(s,t)* included iff  
-*t* ∈ N̂(s)  **and**  *s* ∈ N̂(t).
+$$\lambda_n = c \cdot \sqrt{{\frac{{\log p}}{{n}}}}, \quad c = {c:.1f}$$
 
-**Burnin**: max(300, 5p) steps for grids.
+Larger c → fewer false positives (stronger sparsity).
 """
     )
     run_btn = st.button("▶ Run Experiment", type="primary", use_container_width=True)
