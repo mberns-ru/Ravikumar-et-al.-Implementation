@@ -1,5 +1,7 @@
 # 🔗 Ising Model Selection via ℓ₁-Regularized Logistic Regression
 
+👉 **Try the interactive app:** https://ravikumar2010.streamlit.app
+
 This project reproduces key experiments from:
 
 > **Ravikumar, Wainwright & Lafferty (2010)**  
