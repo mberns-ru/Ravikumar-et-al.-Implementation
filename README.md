@@ -1,10 +1,3 @@
-Here are clean, ready-to-use `README.md` and `requirements.txt` files tailored to your project.
-
----
-
-# 📄 `README.md`
-
-````markdown
 # 🔗 Ising Model Selection via ℓ₁-Regularized Logistic Regression
 
 This project reproduces key experiments from:
